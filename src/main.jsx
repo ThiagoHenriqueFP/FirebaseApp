@@ -1,10 +1,9 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import Login from "./pages/Login/index.jsx";
-
+import { AppRouter } from "./routes/routes";
+import { AuthGoogleProvider } from "./contexts/authGoogle";
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Login />
-  </React.StrictMode>
+  <AuthGoogleProvider>
+    <AppRouter />
+  </AuthGoogleProvider>
 );
