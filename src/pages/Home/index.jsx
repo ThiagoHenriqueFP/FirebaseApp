@@ -3,7 +3,8 @@ import { TiEdit, TiDeleteOutline } from "react-icons/ti";
 import { database as db } from "../../services/firebaseConfig";
 import { set, ref, onValue } from "firebase/database";
 import { v4 } from "uuid";
-
+import "./style.css";
+import Popup from "reactjs-popup";
 export default function Login() {
   const [parsedUser, setParsedUser] = useState({});
   //gambiarra, favor nao ajeitar
@@ -37,6 +38,11 @@ export default function Login() {
       }
     });
   }, [reload]);
+
+  const logOut = () => {
+    sessionStorage.clear();
+    window.location.reload();
+  };
 
   const musicList = music.map((el) => (
     <li key={Object.keys(el)}>
