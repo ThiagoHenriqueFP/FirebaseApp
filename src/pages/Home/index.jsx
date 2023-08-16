@@ -24,6 +24,7 @@ export default function Login() {
   // saveMusic(parsedUser.uid, "robocop hay", "mamonas assassinas");
   useEffect(() => {
     setParsedUser(JSON.parse(user));
+
     let getMusics = ref(db, `users/${parsedUser.uid}`);
     onValue(getMusics, (snapshot) => {
       console.log(snapshot.val());
@@ -43,20 +44,9 @@ export default function Login() {
       <span>{el[Object.keys(el)].musicName}</span>
       <br />
       <span>{el[Object.keys(el)].author}</span>
-      <Popup
-        trigger={
-          <button className="update-music">
-            <TiEdit />
-          </button>
-        }
-        modal
-      >
-        {(close) => (
-          <div>
-            <form></form>
-          </div>
-        )}
-      </Popup>
+      <button className="update-music">
+        <TiEdit />
+      </button>
       <button className="remove-music">
         <TiDeleteOutline />
       </button>
@@ -74,18 +64,17 @@ export default function Login() {
             Tracks
           </h1>
           <div className="separator">
-            <img className="photo" src={parsedUser.photoURL}></img>
-            <div className="infos">Musicas de {parsedUser.displayName} </div>
+            <div className="photo"></div>
+            <div className="infos">Musicas de Nome vindo do firebase</div>
           </div>
         </header>
         <div className="list">
           <ul>{musicList}</ul>
         </div>
+
         <button className="add-music">Inserir musica</button>
       </div>
-      <button onClick={logOut} className="detached">
-        logout
-      </button>
+      <button className="detached">logout</button>
     </>
   );
 }
