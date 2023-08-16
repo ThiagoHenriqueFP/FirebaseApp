@@ -4,7 +4,7 @@ import { database as db } from "../../services/firebaseConfig";
 import { ref, onValue, remove } from "firebase/database";
 import Popup from "reactjs-popup";
 import FunctionalModal from "../../components/modal";
-
+import Form from "../../components/Form";
 import "./style.css";
 
 export default function Login() {
@@ -16,18 +16,8 @@ export default function Login() {
 
   function handleDelete(key) {
     let removeChild = ref(db, `users/${parsedUser.uid}/musics/${key}`);
-
     remove(removeChild);
     window.location.reload();
-  }
-
-  async function updateMusic(musicKey, author) {
-    // users/useruuid/musics/musicuid
-    console.log(author);
-    //set(ref(db, `users/${parsedUser.uid}/musics/${musicKey}`), {
-    //  musicName: "xabalau",
-    //  author: "xuxuxu",
-    //});
   }
 
   useMemo(() => {
@@ -45,9 +35,8 @@ export default function Login() {
             ...value,
           });
         }
-
         setMusic((old) => [...old, parsedMusics]);
-      } else {
+      } else if (snapshot.val() == null && reload < 6) {
         setReload(reload + 1);
       }
     });
@@ -76,33 +65,7 @@ export default function Login() {
               }
               modal
             >
-              {(close) => (
-                <div>
-                  <form className="update-form">
-                    <div>
-                      <label htmlFor="author">Author: </label>
-                      <input type="text" id="author" name="author"></input>
-                    </div>
-                    <div>
-                      <label htmlFor="musicName">Music name:</label>
-                      <input
-                        type="text"
-                        id="musicName"
-                        name="musicName"
-                      ></input>
-                    </div>
-                    <div className="buttons">
-                      <button onClick={close}>Cancel</button>
-                      <button
-                        onClick={updateMusic(
-                          els.key,
-                          document.getElementById("author")
-                        )}
-                      ></button>
-                    </div>
-                  </form>
-                </div>
-              )}
+              <Form userId={parsedUser.uid} musicKey={els.key} />
             </Popup>
             <button
               className="remove-music"

@@ -127,22 +127,3 @@ svg {
 [data-popup="tooltip"].popup-overlay {
   background: transparent;
 }
-.update-form {
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-}
-.update-form .buttons {
-  padding-top: 30px;
-  display: flex;
-  justify-content: space-around;
-}
-.update-form div {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
-}
-.update-form div input,
-label {
-  width: 200px;
-}
