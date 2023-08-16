@@ -45,7 +45,7 @@ export default function Form(props) {
           ></input>
         </div>
         <div className="buttons">
-          <button onClick={updateMusic()}>Alterar</button>
+          <button onClick={updateMusic}>Alterar</button>
         </div>
       </form>
     </div>
