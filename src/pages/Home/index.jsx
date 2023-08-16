@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
 import { database as db } from "../../services/firebaseConfig";
+import { set, ref, onValue } from "firebase/database";
 import { v4 } from "uuid";
 
 export default function Login() {
   const [parsedUser, setParsedUser] = useState({});
-  const [music, setMusic] = useState([]);
   //gambiarra, favor nao ajeitar
   const [reload, setReload] = useState(0);
   // const [dropDown, setDropDown] = useState(false);
@@ -21,8 +21,7 @@ export default function Login() {
     });
   }
 
-  // saveMusic(parsedUser.uid, "robocop hay", "mamonas assassinas");
-  useEffect(() => {
+  useMemo(() => {
     setParsedUser(JSON.parse(user));
 
     let getMusics = ref(db, `users/${parsedUser.uid}`);
@@ -44,9 +43,20 @@ export default function Login() {
       <span>{el[Object.keys(el)].musicName}</span>
       <br />
       <span>{el[Object.keys(el)].author}</span>
-      <button className="update-music">
-        <TiEdit />
-      </button>
+      <Popup
+        trigger={
+          <button className="update-music">
+            <TiEdit />
+          </button>
+        }
+        modal
+      >
+        {(close) => (
+          <div>
+            <form></form>
+          </div>
+        )}
+      </Popup>
       <button className="remove-music">
         <TiDeleteOutline />
       </button>
@@ -64,17 +74,18 @@ export default function Login() {
             Tracks
           </h1>
           <div className="separator">
-            <div className="photo"></div>
-            <div className="infos">Musicas de Nome vindo do firebase</div>
+            <img className="photo" src={parsedUser.photoURL}></img>
+            <div className="infos">Musicas de {parsedUser.displayName} </div>
           </div>
         </header>
         <div className="list">
           <ul>{musicList}</ul>
         </div>
-
         <button className="add-music">Inserir musica</button>
       </div>
-      <button className="detached">logout</button>
+      <button onClick={logOut} className="detached">
+        logout
+      </button>
     </>
   );
 }
