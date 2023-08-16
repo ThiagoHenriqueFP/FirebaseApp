@@ -20,7 +20,7 @@ export default function Login() {
     remove(removeChild);
     window.location.reload();
   }
-  
+
   async function updateMusic(musicKey, author) {
     // users/useruuid/musics/musicuid
     console.log(author);
@@ -76,25 +76,34 @@ export default function Login() {
               }
               modal
             >
-                {(close) => (
-          <div>
-            <form className="update-form">
-              <div>
-                <label for="author">Author: </label>
-                <input type="text" id="author" name="author"></input>
-              </div>
-              <div>
-                <label for="musicName">Music name:</label>
-                <input type="text" id="musicName" name="musicName"></input>
-              </div>
-              <div className="buttons">
-                <button onClick={close}>Cancel</button>
-                <button
-                  onClick={updateMusic(
-                    els.key,
-                    document.getElementById("author")
-                  )}
-                </Popup>
+              {(close) => (
+                <div>
+                  <form className="update-form">
+                    <div>
+                      <label htmlFor="author">Author: </label>
+                      <input type="text" id="author" name="author"></input>
+                    </div>
+                    <div>
+                      <label htmlFor="musicName">Music name:</label>
+                      <input
+                        type="text"
+                        id="musicName"
+                        name="musicName"
+                      ></input>
+                    </div>
+                    <div className="buttons">
+                      <button onClick={close}>Cancel</button>
+                      <button
+                        onClick={updateMusic(
+                          els.key,
+                          document.getElementById("author")
+                        )}
+                      ></button>
+                    </div>
+                  </form>
+                </div>
+              )}
+            </Popup>
             <button
               className="remove-music"
               onClick={() => handleDelete(els.key)}
