@@ -20,6 +20,15 @@ export default function Login() {
     remove(removeChild);
     window.location.reload();
   }
+  
+  async function updateMusic(musicKey, author) {
+    // users/useruuid/musics/musicuid
+    console.log(author);
+    //set(ref(db, `users/${parsedUser.uid}/musics/${musicKey}`), {
+    //  musicName: "xabalau",
+    //  author: "xuxuxu",
+    //});
+  }
 
   useMemo(() => {
     setParsedUser(JSON.parse(user));
@@ -66,7 +75,26 @@ export default function Login() {
                 </button>
               }
               modal
-            ></Popup>
+            >
+                {(close) => (
+          <div>
+            <form className="update-form">
+              <div>
+                <label for="author">Author: </label>
+                <input type="text" id="author" name="author"></input>
+              </div>
+              <div>
+                <label for="musicName">Music name:</label>
+                <input type="text" id="musicName" name="musicName"></input>
+              </div>
+              <div className="buttons">
+                <button onClick={close}>Cancel</button>
+                <button
+                  onClick={updateMusic(
+                    els.key,
+                    document.getElementById("author")
+                  )}
+                </Popup>
             <button
               className="remove-music"
               onClick={() => handleDelete(els.key)}
