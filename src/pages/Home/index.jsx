@@ -1,33 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
-import "./style.css";
-import { set, ref, onValue } from "firebase/database";
 import { database as db } from "../../services/firebaseConfig";
+import { set, ref, onValue } from "firebase/database";
 import { v4 } from "uuid";
+
+import "./style.css";
 
 export default function Login() {
   const [parsedUser, setParsedUser] = useState({});
+  const [music, setMusic] = useState([]);
+  //gambiarra, favor nao ajeitar
+  const [reload, setReload] = useState(0);
+  // const [dropDown, setDropDown] = useState(false);
+
   let user = sessionStorage.getItem("@AuthFirebase::user");
 
-  const [music, setMusic] = useState([]);
-
-  async function saveMusic(userId, musicName, author) {
-    set(ref(db, `users/${userId}/musics/${v4()}`), {
-      musicName,
-      author,
-    });
-  }
-
-  // saveMusic(parsedUser.uid, "robocop hay", "mamonas assassinas");
-  useEffect(() => {
+  useMemo(() => {
     setParsedUser(JSON.parse(user));
 
     let getMusics = ref(db, `users/${parsedUser.uid}`);
     onValue(getMusics, (snapshot) => {
-      const { musics } = snapshot.val();
-      setMusic((old) => [...old, musics]);
+      console.log(snapshot.val());
+      if (snapshot.val()) {
+        console.log(snapshot.val());
+        const { musics } = snapshot.val();
+
+        setMusic((old) => [...old, musics]);
+      } else {
+        setReload(reload + 1);
+      }
     });
-  }, []);
+  }, [reload]);
 
   const musicList = music.map((el) => (
     <li key={Object.keys(el)}>
