@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
 import { database as db } from "../../services/firebaseConfig";
-import { set, ref, onValue } from "firebase/database";
+import { set, ref, onValue, update } from "firebase/database";
 import { v4 } from "uuid";
 import "./style.css";
 import Popup from "reactjs-popup";
@@ -31,7 +31,6 @@ export default function Login() {
       if (snapshot.val()) {
         console.log(snapshot.val());
         const { musics } = snapshot.val();
-
         setMusic((old) => [...old, musics]);
       } else {
         setReload(reload + 1);
@@ -43,6 +42,15 @@ export default function Login() {
     sessionStorage.clear();
     window.location.reload();
   };
+
+  async function updateMusic(musicKey, author) {
+    // users/useruuid/musics/musicuid
+    console.log(author);
+    //set(ref(db, `users/${parsedUser.uid}/musics/${musicKey}`), {
+    //  musicName: "xabalau",
+    //  author: "xuxuxu",
+    //});
+  }
 
   const musicList = music.map((el) => (
     <li key={Object.keys(el)}>
@@ -59,7 +67,27 @@ export default function Login() {
       >
         {(close) => (
           <div>
-            <form></form>
+            <form className="update-form">
+              <div>
+                <label for="author">Author: </label>
+                <input type="text" id="author" name="author"></input>
+              </div>
+              <div>
+                <label for="musicName">Music name:</label>
+                <input type="text" id="musicName" name="musicName"></input>
+              </div>
+              <div className="buttons">
+                <button onClick={close}>Cancel</button>
+                <button
+                  onClick={updateMusic(
+                    Object.keys(el),
+                    document.getElementById("author")
+                  )}
+                >
+                  Update
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </Popup>
