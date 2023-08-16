@@ -42,6 +42,12 @@
   padding-left: 0;
 }
 
+.list > ul > li {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px;
+}
+
 svg {
   width: 20px;
   height: 20px;

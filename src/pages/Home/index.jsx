@@ -1,38 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
 import { database as db } from "../../services/firebaseConfig";
-import { set, ref, onValue } from "firebase/database";
-import { v4 } from "uuid";
-import "./style.css";
+import { ref, onValue } from "firebase/database";
 import Popup from "reactjs-popup";
+import FunctionalModal from "../../components/modal";
+
+import "./style.css";
+
 export default function Login() {
   const [parsedUser, setParsedUser] = useState({});
   //gambiarra, favor nao ajeitar
   const [reload, setReload] = useState(0);
-  // const [dropDown, setDropDown] = useState(false);
-
-  let user = sessionStorage.getItem("@AuthFirebase::user");
-
   const [music, setMusic] = useState([]);
-
-  async function saveMusic(userId, musicName, author) {
-    set(ref(db, `users/${userId}/musics/${v4()}`), {
-      musicName,
-      author,
-    });
-  }
+  let user = sessionStorage.getItem("@AuthFirebase::user");
 
   useMemo(() => {
     setParsedUser(JSON.parse(user));
 
     let getMusics = ref(db, `users/${parsedUser.uid}`);
     onValue(getMusics, (snapshot) => {
-      console.log(snapshot.val());
       if (snapshot.val()) {
-        console.log(snapshot.val());
         const { musics } = snapshot.val();
 
-        setMusic((old) => [...old, musics]);
+        let parsedMusics = [];
+        for (const [key, value] of Object.entries(musics)) {
+          parsedMusics.push({
+            key,
+            ...value,
+          });
+        }
+
+        setMusic((old) => [...old, parsedMusics]);
       } else {
         setReload(reload + 1);
       }
@@ -44,30 +42,32 @@ export default function Login() {
     window.location.reload();
   };
 
-  const musicList = music.map((el) => (
-    <li key={Object.keys(el)}>
-      <span>{el[Object.keys(el)].musicName}</span>
-      <br />
-      <span>{el[Object.keys(el)].author}</span>
-      <Popup
-        trigger={
-          <button className="update-music">
-            <TiEdit />
-          </button>
-        }
-        modal
-      >
-        {(close) => (
+  const musicList = music.map((el) =>
+    el.map((els) => {
+      return (
+        <li key={els.key}>
           <div>
-            <form></form>
+            <span>{els.musicName}</span>
+            <br />
+            <span>{els.author}</span>
           </div>
-        )}
-      </Popup>
-      <button className="remove-music">
-        <TiDeleteOutline />
-      </button>
-    </li>
-  ));
+          <div>
+            <Popup
+              trigger={
+                <button className="update-music">
+                  <TiEdit />
+                </button>
+              }
+              modal
+            ></Popup>
+            <button className="remove-music">
+              <TiDeleteOutline />
+            </button>
+          </div>
+        </li>
+      );
+    })
+  );
 
   return (
     <>
@@ -87,7 +87,12 @@ export default function Login() {
         <div className="list">
           <ul>{musicList}</ul>
         </div>
-        <button className="add-music">Inserir musica</button>
+        <Popup
+          trigger={<button className="add-music">Inserir musica</button>}
+          modal
+        >
+          <FunctionalModal userId={parsedUser.uid} />
+        </Popup>
       </div>
       <button onClick={logOut} className="detached">
         logout
