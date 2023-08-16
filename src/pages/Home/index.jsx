@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
 import { database as db } from "../../services/firebaseConfig";
-import { ref, onValue } from "firebase/database";
+import { ref, onValue, remove } from "firebase/database";
 import Popup from "reactjs-popup";
 import FunctionalModal from "../../components/modal";
 
@@ -13,6 +13,13 @@ export default function Login() {
   const [reload, setReload] = useState(0);
   const [music, setMusic] = useState([]);
   let user = sessionStorage.getItem("@AuthFirebase::user");
+
+  function handleDelete(key) {
+    let removeChild = ref(db, `users/${parsedUser.uid}/musics/${key}`);
+
+    remove(removeChild);
+    window.location.reload();
+  }
 
   useMemo(() => {
     setParsedUser(JSON.parse(user));
@@ -60,7 +67,10 @@ export default function Login() {
               }
               modal
             ></Popup>
-            <button className="remove-music">
+            <button
+              className="remove-music"
+              onClick={() => handleDelete(els.key)}
+            >
               <TiDeleteOutline />
             </button>
           </div>
