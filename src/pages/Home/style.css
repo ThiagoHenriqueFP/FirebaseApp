@@ -127,3 +127,6 @@ svg {
 [data-popup="tooltip"].popup-overlay {
   background: transparent;
 }
+.file {
+  display: none;
+}
