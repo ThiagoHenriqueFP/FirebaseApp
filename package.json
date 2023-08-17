@@ -16,6 +16,7 @@
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.15.0",
     "reactjs-popup": "^2.0.5",
+    "use-file-picker": "^1.7.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

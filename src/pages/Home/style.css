@@ -127,6 +127,9 @@ svg {
 [data-popup="tooltip"].popup-overlay {
   background: transparent;
 }
-.file {
-  display: none;
+
+.photo-container > button {
+  position: absolute;
+  padding: 5px;
+  background: #40128b;
 }
