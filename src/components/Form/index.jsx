@@ -1,13 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { ref, update } from "firebase/database";
 import { database as db } from "../../services/firebaseConfig";
 import "./style.css";
 
 export default function Form(props) {
-  // eslint-disable-next-line react/prop-types
-  const { userId, musicKey } = props;
-  const [musicName, setMusicName] = useState("");
-  const [author, setAuthor] = useState("");
+  const { userId, music } = props;
+  const [musicName, setMusicName] = useState(music.musicName);
+  const [author, setAuthor] = useState(music.author);
 
   function handleMusicName(event) {
     setMusicName(event.target.value);
@@ -17,7 +17,7 @@ export default function Form(props) {
   }
 
   async function updateMusic() {
-    await update(ref(db, `users/${userId}/musics/${musicKey}`), {
+    await update(ref(db, `users/${userId}/musics/${music.key}`), {
       musicName: musicName,
       author: author,
     });
@@ -33,6 +33,7 @@ export default function Form(props) {
             type="text"
             id="musicName"
             name="musicName"
+            value={musicName}
           ></input>
         </div>
         <div>
@@ -42,6 +43,7 @@ export default function Form(props) {
             type="text"
             id="author"
             name="author"
+            value={author}
           ></input>
         </div>
         <div className="buttons">

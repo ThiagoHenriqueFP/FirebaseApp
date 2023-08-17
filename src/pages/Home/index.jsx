@@ -65,7 +65,7 @@ export default function Login() {
               }
               modal
             >
-              <Form userId={parsedUser.uid} musicKey={els.key} />
+              <Form userId={parsedUser.uid} music={els} />
             </Popup>
             <button
               className="remove-music"
