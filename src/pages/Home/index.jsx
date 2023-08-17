@@ -27,18 +27,20 @@ export default function Login() {
     contentType: "image/jpeg",
   };
   async function uploadPhoto(photo) {
-    let path = `${parsedUser.uid}.jpeg`;
-    const photoReference = refStorage(storage, path);
-    await uploadBytes(photoReference, photo[0], metadata).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
+    if (photo[0] !== undefined) {
+      let path = `${parsedUser.uid}.jpeg`;
+      console.log("Isso não importa porraaaa");
+      const photoReference = refStorage(storage, path);
+      await uploadBytes(photoReference, photo[0], metadata).then((snapshot) => {
+        console.log("Uploaded a blob or file!");
+      });
+    }
   }
 
   const [openFileSelector, { filesContent, loading, errors }] = useFilePicker({
     readAs: "DataURL",
     accept: "image/*",
     onFilesSuccessfulySelected: ({ plainFiles, filesContent }) => {
-      // this callback is always called, even if there are errors
       uploadPhoto(plainFiles);
       window.location.reload();
     },
