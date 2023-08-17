@@ -5,6 +5,7 @@ import "./style.css";
 
 export default function Login() {
   const { signInWithGoogle, signed } = useContext(AuthGoogleContext);
+
   async function loginWithGoogle() {
     await signInWithGoogle();
   }

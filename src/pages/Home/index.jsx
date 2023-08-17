@@ -1,18 +1,35 @@
 import { useMemo, useState } from "react";
 import { TiEdit, TiDeleteOutline } from "react-icons/ti";
-import { database as db } from "../../services/firebaseConfig";
+import { BiSolidImageAdd } from "react-icons/bi";
+import { database as db, storage } from "../../services/firebaseConfig";
 import { ref, onValue, remove } from "firebase/database";
 import Popup from "reactjs-popup";
 import FunctionalModal from "../../components/modal";
 import Form from "../../components/Form";
 import "./style.css";
+import { getDownloadURL, ref as refStorage } from "firebase/storage";
 
 export default function Login() {
   const [parsedUser, setParsedUser] = useState({});
   //gambiarra, favor nao ajeitar
   const [reload, setReload] = useState(0);
   const [music, setMusic] = useState([]);
+  const [photo, setPhoto] = useState("");
+
   let user = sessionStorage.getItem("@AuthFirebase::user");
+
+  async function getImage() {
+    let result = null;
+    try {
+      result = await getDownloadURL(
+        refStorage(storage, `${parsedUser.uid}.jpeg`)
+      );
+    } catch (err) {
+      console.log(err);
+    }
+
+    result ? setPhoto(result) : setPhoto(parsedUser.photoURL);
+  }
 
   function handleDelete(key) {
     let removeChild = ref(db, `users/${parsedUser.uid}/musics/${key}`);
@@ -22,6 +39,7 @@ export default function Login() {
 
   useMemo(() => {
     setParsedUser(JSON.parse(user));
+    getImage();
 
     let getMusics = ref(db, `users/${parsedUser.uid}`);
     onValue(getMusics, (snapshot) => {
@@ -90,7 +108,12 @@ export default function Login() {
             Tracks
           </h1>
           <div className="separator">
-            <img className="photo" src={parsedUser.photoURL}></img>
+            <div className="photo-container">
+              <img className="photo" src={photo}></img>
+              <button>
+                <BiSolidImageAdd />
+              </button>
+            </div>
             <div className="infos">Musicas de {parsedUser.displayName} </div>
           </div>
         </header>
