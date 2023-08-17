@@ -26,10 +26,10 @@ export default function Login() {
   const metadata = {
     contentType: "image/jpeg",
   };
-  function uploadPhoto(photo) {
+  async function uploadPhoto(photo) {
     let path = `${parsedUser.uid}.jpeg`;
     const photoReference = refStorage(storage, path);
-    uploadBytes(photoReference, photo[0], metadata).then((snapshot) => {
+    await uploadBytes(photoReference, photo[0], metadata).then((snapshot) => {
       console.log("Uploaded a blob or file!");
     });
   }
@@ -37,9 +37,10 @@ export default function Login() {
   const [openFileSelector, { filesContent, loading, errors }] = useFilePicker({
     readAs: "DataURL",
     accept: "image/*",
-    onFilesSelected: ({ plainFiles, filesContent, errors }) => {
+    onFilesSuccessfulySelected: ({ plainFiles, filesContent }) => {
       // this callback is always called, even if there are errors
       uploadPhoto(plainFiles);
+      window.location.reload();
     },
   });
 
